@@ -59,7 +59,8 @@ internal enum AuthenticatorTransport: String, Codable {
   case smartCard = "smart-card"
 
 
-  func appleise() -> ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport? {
+    @available(iOS 15.0, *)
+    func appleise() -> ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport? {
     switch self {
       case .ble:
         return ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport.bluetooth
@@ -102,10 +103,9 @@ internal struct PublicKeyCredentialParameters: Codable {
   var alg: COSEAlgorithmIdentifier = -7
   var type: PublicKeyCredentialType = .publicKey
 
-  func appleise() -> ASAuthorizationPublicKeyCredentialParameters {
-    if #available(iOS 15.0, *) {
-      return ASAuthorizationPublicKeyCredentialParameters.init(algorithm: ASCOSEAlgorithmIdentifier(rawValue: self.alg))
-    }
+    @available(iOS 15.0, *)
+    func appleise() -> ASAuthorizationPublicKeyCredentialParameters {
+        return ASAuthorizationPublicKeyCredentialParameters.init(algorithm: ASCOSEAlgorithmIdentifier(rawValue: self.alg))
   }
 }
 
@@ -114,7 +114,8 @@ internal enum ResidentKeyRequirement: String, Codable {
   case preferred
   case required
 
-  func appleise() -> ASAuthorizationPublicKeyCredentialResidentKeyPreference {
+    @available(iOS 15.0, *)
+    func appleise() -> ASAuthorizationPublicKeyCredentialResidentKeyPreference {
     switch self {
       case .discouraged:
         return ASAuthorizationPublicKeyCredentialResidentKeyPreference.discouraged
@@ -133,7 +134,8 @@ internal enum UserVerificationRequirement: String, Codable {
   case preferred
   case required
 
-  func appleise () -> ASAuthorizationPublicKeyCredentialUserVerificationPreference {
+    @available(iOS 15.0, *)
+    func appleise () -> ASAuthorizationPublicKeyCredentialUserVerificationPreference {
     switch self {
       case .discouraged:
         return ASAuthorizationPublicKeyCredentialUserVerificationPreference.discouraged
@@ -154,11 +156,13 @@ internal struct PublicKeyCredentialDescriptor: Codable {
   var transports: [AuthenticatorTransport]?
   var type: PublicKeyCredentialType = .publicKey
 
-  func getPlatformDescriptor() -> ASAuthorizationPlatformPublicKeyCredentialDescriptor {
+    @available(iOS 15.0, *)
+    func getPlatformDescriptor() -> ASAuthorizationPlatformPublicKeyCredentialDescriptor {
     return ASAuthorizationPlatformPublicKeyCredentialDescriptor.init(credentialID: Data(base64URLEncoded: self.id)!)
   }
 
-  func getCrossPlatformDescriptor() -> ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor {
+    @available(iOS 15.0, *)
+    func getCrossPlatformDescriptor() -> ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor {
     var transports = ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport.allSupported
 
     if self.transports?.isEmpty == false {
@@ -184,7 +188,8 @@ internal enum AttestationConveyancePreference: String, Codable {
   case indirect
   case none
 
-  func appleise() -> ASAuthorizationPublicKeyCredentialAttestationKind {
+    @available(iOS 15.0, *)
+    func appleise() -> ASAuthorizationPublicKeyCredentialAttestationKind {
     switch self {
       case .none:
         return ASAuthorizationPublicKeyCredentialAttestationKind.none
@@ -223,7 +228,8 @@ internal struct AuthenticationExtensionsClientInputs: Codable {
 
 
 protocol PasskeyResultHandler {
-  func onSuccess(_ data: PublicKeyCredentialJSONResponse)
+    @available(iOS 15.0, *)
+    func onSuccess(_ data: PublicKeyCredentialJSONResponse)
   func onFailure(_ error: Error)
 }
 

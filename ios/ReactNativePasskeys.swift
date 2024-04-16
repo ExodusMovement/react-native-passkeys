@@ -28,6 +28,7 @@ func handleASAuthorizationError(error: NSError) -> Error {
 }
 
 
+@available(iOS 15.0, *)
 @objc(ReactNativePasskeys)
 class ReactNativePasskeys: NSObject, PasskeyResultHandler {
   private var passkeyContext: PasskeyContext?
@@ -200,6 +201,7 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
   }
 }
 
+@available(iOS 15.0, *)
 private func preparePlatformRegistrationRequest(challenge: Data,
                                                 userId: Data,
                                                 request: PublicKeyCredentialCreationOptions) -> ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest {
@@ -249,6 +251,7 @@ private func preparePlatformRegistrationRequest(challenge: Data,
 }
 
 
+@available(iOS 15.0, *)
 private func prepareCrossPlatformRegistrationRequest(challenge: Data,
                                                      userId: Data,
                                                      request: PublicKeyCredentialCreationOptions) -> ASAuthorizationSecurityKeyPublicKeyCredentialRegistrationRequest {
@@ -289,6 +292,7 @@ private func prepareCrossPlatformRegistrationRequest(challenge: Data,
 
 }
 
+@available(iOS 15.0, *)
 private func prepareCrossPlatformAssertionRequest(challenge: Data,
                                                   request: PublicKeyCredentialRequestOptions) -> ASAuthorizationSecurityKeyPublicKeyCredentialAssertionRequest {
 
@@ -308,6 +312,7 @@ private func prepareCrossPlatformAssertionRequest(challenge: Data,
   return crossPlatformAssertionRequest
 }
 
+@available(iOS 15.0, *)
 private func preparePlatformAssertionRequest(challenge: Data, request: PublicKeyCredentialRequestOptions) -> ASAuthorizationPlatformPublicKeyCredentialAssertionRequest {
 
   let platformKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(
