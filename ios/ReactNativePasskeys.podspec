@@ -12,16 +12,14 @@ Pod::Spec.new do |s|
   s.homepage       = package['homepage']
   s.platform       = :ios, '15.0'
   s.swift_version  = '5.4'
-  s.source         = { git: 'https://github.com/peterferguson/react-native-passkeys' }
+  s.source         = { git: 'https://github.com/ExodusMovement/react-native-passkeys' }
   s.static_framework = true
-
-  s.dependency 'ExpoModulesCore'
 
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'SWIFT_COMPILATION_MODE' => 'wholemodule'
   }
-  
+
   s.source_files = "**/*.{h,m,swift}"
 end

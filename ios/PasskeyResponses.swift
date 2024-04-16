@@ -1,116 +1,75 @@
-import ExpoModulesCore
-
-/** 
+/**
     Specification reference: https://w3c.github.io/webauthn/#typedefdef-publickeycredentialjson
 */
-typealias PublicKeyCredentialJSON = Either<RegistrationResponseJSON, AuthenticationResponseJSON>
+@available(iOS 15.0, *)
+enum PublicKeyCredentialJSONResponse {
+  case registration(RegistrationResponseJSON)
+  case authentication(AuthenticationResponseJSON)
+}
 
 /**
     Specification reference: https://w3c.github.io/webauthn/#dictdef-registrationresponsejson
 */
-internal struct RegistrationResponseJSON: Record {
-    @Field
-    var id: Base64URLString
-
-    @Field
-    var rawId: Base64URLString
-
-    @Field
-    var response: AuthenticatorAttestationResponseJSON
-    
-    @Field
-    var authenticatorAttachment: AuthenticatorAttachment?
-
-    @Field
-    var clientExtensionResults: AuthenticationExtensionsClientOutputsJSON?
-
-    @Field
-    var type: PublicKeyCredentialType = .publicKey
+@available(iOS 15.0, *)
+internal struct RegistrationResponseJSON: Codable {
+  var id: Base64URLString
+  var rawId: Base64URLString
+  var response: AuthenticatorAttestationResponseJSON
+  var authenticatorAttachment: AuthenticatorAttachment?
+  var clientExtensionResults: AuthenticationExtensionsClientOutputsJSON?
+  var type: PublicKeyCredentialType = .publicKey
 }
 
 /**
     Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticatorattestationresponsejson
 */
-internal struct AuthenticatorAttestationResponseJSON: Record {
-     
-    @Field
-    var clientDataJSON: Base64URLString
-
-    // - Required in L3 but not in L2 so leaving optional as most have not adapted L3 yet
-    @Field
-    var authenticatorData: Base64URLString?
-   
-    // - Required in L3 but not in L2 so leaving optional as most have not adapted L3 yet
-    @Field
-    var transports: [AuthenticatorTransport]?
-
-    @Field
-    var publicKeyAlgorithm: Int?
-
-    @Field
-    var publicKey: Base64URLString?
-    
-    @Field
-    var attestationObject: Base64URLString
+@available(iOS 15.0, *)
+internal struct AuthenticatorAttestationResponseJSON: Codable {
+  var clientDataJSON: Base64URLString
+  // - Required in L3 but not in L2 so leaving optional as most have not adapted L3 yet
+  var authenticatorData: Base64URLString?
+  // - Required in L3 but not in L2 so leaving optional as most have not adapted L3 yet
+  var transports: [AuthenticatorTransport]?
+  var publicKeyAlgorithm: Int?
+  var publicKey: Base64URLString?
+  var attestationObject: Base64URLString
 }
 
 /**
     Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticationresponsejson
 */
-internal struct AuthenticationResponseJSON: Record {
-    
-    @Field
-    var type: PublicKeyCredentialType = .publicKey
-    
-    // - base64URL version of rawId
-    @Field
-    var id: Base64URLString
 
-    @Field
-    var rawId: Base64URLString?
+internal struct AuthenticationResponseJSON: Codable {
+  var type: PublicKeyCredentialType = .publicKey
+  // - base64URL version of rawId
+  var id: Base64URLString
+  var rawId: Base64URLString?
+  var authenticatorAttachment: AuthenticatorAttachment?
+  var response: AuthenticatorAssertionResponseJSON
 
-    @Field
-    var authenticatorAttachment: AuthenticatorAttachment?
-    
-    @Field
-    var response: AuthenticatorAssertionResponseJSON
-    
-    @Field
-    var clientExtensionResults: AuthenticationExtensionsClientOutputsJSON?
+  var clientExtensionResults: AuthenticationExtensionsClientOutputsJSON?
 }
 
 /**
     Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticatorassertionresponsejson
 */
-internal struct AuthenticatorAssertionResponseJSON: Record {
-    
-    @Field
-    var authenticatorData: Base64URLString
-
-    @Field
-    var clientDataJSON: Base64URLString
-
-    @Field
-    var signature: Base64URLString
-    
-    @Field
-    var userHandle: Base64URLString?
-
-    @Field
-    var attestationObject: Base64URLString?
-    
+internal struct AuthenticatorAssertionResponseJSON: Codable {
+  var authenticatorData: Base64URLString
+  var clientDataJSON: Base64URLString
+  var signature: Base64URLString
+  var userHandle: Base64URLString?
+  var attestationObject: Base64URLString?
 }
 
 /**
     Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticationextensionsclientoutputsjson
 */
-internal struct  AuthenticationExtensionsClientOutputsJSON: Record {
+internal struct  AuthenticationExtensionsClientOutputsJSON: Codable {
 
-    // ? this is only available in iOS 17 but I cannot set this here
-    // @available(iOS 17.0, *)
-    @Field
-    var largeBlob: AuthenticationExtensionsLargeBlobOutputsJSON?
-    
+  // ? this is only available in iOS 17 but I cannot set this here
+  // @available(iOS 17.0, *)
+  var largeBlob: AuthenticationExtensionsLargeBlobOutputsJSON?
+
 }
 
 /**
@@ -119,14 +78,8 @@ internal struct  AuthenticationExtensionsClientOutputsJSON: Record {
 
  Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticationextensionslargebloboutputs
  */
-internal struct AuthenticationExtensionsLargeBlobOutputsJSON: Record {
-
-    @Field
-    var supported: Bool?;
-
-    @Field
-    var blob: Base64URLString?;
-
-    @Field
-    var written: Bool?;
-};
+internal struct AuthenticationExtensionsLargeBlobOutputsJSON: Codable {
+  var supported: Bool?
+  var blob: Base64URLString?
+  var written: Bool?
+}

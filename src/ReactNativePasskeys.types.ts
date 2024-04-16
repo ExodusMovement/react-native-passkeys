@@ -8,6 +8,13 @@ import type {
 	PublicKeyCredentialDescriptorJSON,
 	PublicKeyCredentialUserEntityJSON,
 	AuthenticatorAttestationResponseJSON,
+	PublicKeyCredentialRpEntity,
+	UserVerificationRequirement,
+	PublicKeyCredentialType,
+	AuthenticatorAttachment,
+	AttestationConveyancePreference,
+	AuthenticatorSelectionCriteria,
+	PublicKeyCredentialParameters,
 } from "@simplewebauthn/typescript-types";
 
 export type {
