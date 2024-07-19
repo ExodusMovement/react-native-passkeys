@@ -26,6 +26,12 @@
   "author": "ExodusMovement",
   "license": "MIT",
   "homepage": "https://github.com/ExodusMovement/react-native-passkeys#readme",
+  "files": {
+    "build",
+    "ios",
+    "android",
+    "exodus-react-native-passkeys.podspec"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.2.2",
     "@changesets/cli": "^2.26.2",
