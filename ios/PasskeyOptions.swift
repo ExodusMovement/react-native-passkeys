@@ -1,65 +1,47 @@
-import ExpoModulesCore
 import AuthenticationServices
 
 /**
  navigator.credentials.create request options
- 
+
  Specification reference: https://w3c.github.io/webauthn/#dictionary-makecredentialoptions
 */
-internal struct PublicKeyCredentialCreationOptions: Record {
+struct PublicKeyCredentialCreationOptions: Codable {
 
-    @Field
-    var rp: PublicKeyCredentialRpEntity
+  var rp: PublicKeyCredentialRpEntity
 
-    @Field
-    var user: PublicKeyCredentialUserEntity
+  var user: PublicKeyCredentialUserEntity
 
-    @Field
-    var challenge: Base64URLString
+  var challenge: Base64URLString
 
-    @Field
-    var pubKeyCredParams: [PublicKeyCredentialParameters]
+  var pubKeyCredParams: [PublicKeyCredentialParameters]
 
-    @Field
-    var timeout: Int?
+  var timeout: Int?
 
-    @Field
-    var excludeCredentials: [PublicKeyCredentialDescriptor]?
+  var excludeCredentials: [PublicKeyCredentialDescriptor]?
 
-    @Field
-    var authenticatorSelection: AuthenticatorSelectionCriteria?
 
-    @Field
-    var attestation: AttestationConveyancePreference?
+  var authenticatorSelection: AuthenticatorSelectionCriteria?
 
-    @Field
-    var extensions: AuthenticationExtensionsClientInputs?
-    // var extensions: JavaScriptObject?
+
+  var attestation: AttestationConveyancePreference?
+
+
+  var extensions: AuthenticationExtensionsClientInputs?
+
 
 }
 
 /**
  navigator.credentials.get request options
- 
+
  Specification reference: https://w3c.github.io/webauthn/#dictionary-assertion-options
  */
-internal struct PublicKeyCredentialRequestOptions: Record {
-    @Field
+struct PublicKeyCredentialRequestOptions: Codable {
     var challenge: Base64URLString
-
-    @Field
     var rpId: String
-
     // TODO: implement the timeout
-    @Field
     var timeout: Int? = 60000
-
-    @Field
     var allowCredentials: [PublicKeyCredentialDescriptor]?
-
-    @Field
     var userVerification: UserVerificationRequirement?
-
-    @Field
     var extensions: AuthenticationExtensionsClientInputs?
 }
