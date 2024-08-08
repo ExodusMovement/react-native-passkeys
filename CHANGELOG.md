@@ -1,5 +1,10 @@
 # rn-passkeys
 
+## 0.2.3
+
+- [Remove expo from iOS](https://github.com/ExodusMovement/react-native-passkeys/pull/1)
+- [Publish only needed files](https://github.com/ExodusMovement/react-native-passkeys/pull/2)
+
 ## 0.1.6
 
 ### Patch Changes
