@@ -52,20 +52,20 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  fun isAutoFillAvailable() {
+  fun isAutoFillAvailable(): Boolean {
     return false
   }
 
   @ReactMethod
   fun create(request: ReadableMap, promise: Promise) {
-    val credentialManager = CredentialManager.create(appContext.reactContext?.applicationContext!!)
+    val credentialManager = CredentialManager.create(context.applicationContext!!)
     val json = Gson().toJson(request.toHashMap())
     val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(json)
 
     mainScope.launch {
       try {
         val result =
-                appContext.currentActivity?.let {
+                currentActivity?.let {
                   credentialManager.createCredential(it, createPublicKeyCredentialRequest)
                 }
         val response =
@@ -83,49 +83,52 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
 
   @ReactMethod
   fun get(request: ReadableMap, promise: Promise) {
-    val credentialManager = CredentialManager.create(appContext.reactContext?.applicationContext!!)
+    val credentialManager = CredentialManager.create(context.applicationContext!!)
     val json = Gson().toJson(request.toHashMap())
     val getCredentialRequest = GetCredentialRequest(listOf(GetPublicKeyCredentialOption(json)))
 
-    try {
-      val result =
-              appContext.currentActivity?.let {
-                credentialManager.getCredential(it, getCredentialRequest)
-              }
-      val response =
-              result?.credential?.data?.getString(
-                      "androidx.credentials.BUNDLE_KEY_AUTHENTICATION_RESPONSE_JSON"
-              )
-      val createCredentialResponse =
-              Gson().fromJson(response, AuthenticationResponseJSON::class.java)
-      promise.resolve(createCredentialResponse)
-    } catch (e: GetCredentialException) {
-      promise.reject("Passkey Get", getAuthenticationException(e), e)
+    mainScope.launch {
+      try {
+        val result =
+                currentActivity?.let { credentialManager.getCredential(it, getCredentialRequest) }
+        val response =
+                result?.credential?.data?.getString(
+                        "androidx.credentials.BUNDLE_KEY_AUTHENTICATION_RESPONSE_JSON"
+                )
+        val createCredentialResponse =
+                Gson().fromJson(response, AuthenticationResponseJSON::class.java)
+        promise.resolve(createCredentialResponse)
+      } catch (e: GetCredentialException) {
+        promise.reject("Passkey Get", getAuthenticationException(e), e)
+      }
     }
   }
 
-  private fun getRegistrationException(e: CreateCredentialException) =
-          when (e) {
-            is CreatePublicKeyCredentialDomException -> {
-              e.domError.toString()
-            }
-            is CreateCredentialCancellationException -> {
-              "UserCancelled"
-            }
-            is CreateCredentialInterruptedException -> {
-              "Interrupted"
-            }
-            is CreateCredentialProviderConfigurationException -> {
-              "NotConfigured"
-            }
-            is CreateCredentialUnknownException -> {
-              "UnknownError"
-            }
-            is CreateCredentialUnsupportedException -> {
-              "NotSupported"
-            }
-            else -> e.toString()
-          }
+  private fun getRegistrationException(e: CreateCredentialException): String {
+    when (e) {
+      is CreatePublicKeyCredentialDomException -> {
+        return "DomError: ${e.domError.toString()}"
+      }
+      is CreateCredentialCancellationException -> {
+        return "UserCancelled: ${e.errorMessage.toString()}"
+      }
+      is CreateCredentialInterruptedException -> {
+        return "Interrupted: ${e.errorMessage.toString()}"
+      }
+      is CreateCredentialProviderConfigurationException -> {
+        return "NotConfigured: ${e.errorMessage.toString()}"
+      }
+      is CreateCredentialUnknownException -> {
+        return "UnknownError: ${e.errorMessage.toString()}"
+      }
+      is CreateCredentialUnsupportedException -> {
+        return "NotSupported: ${e.errorMessage.toString()}"
+      }
+      else -> {
+        return "UnhandledError: ${e.errorMessage.toString()}"
+      }
+    }
+  }
 
   private fun getAuthenticationException(e: GetCredentialException) =
           when (e) {
