@@ -115,3 +115,16 @@ Next, you'll need to modify the `compileSdkVersion` in your `app.json` to be at 
 npx expo prebuild -p android
 npx expo run:android # or build in the cloud with EAS
 ```
+
+## Development
+
+```
+yarn install
+```
+
+### Publish
+
+```
+Update version in package.json 
+npm publish
+```
