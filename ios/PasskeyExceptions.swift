@@ -18,7 +18,7 @@ extension AppError: LocalizedError {
   var errorDescription: String? {
     switch self {
       case .notConfiguredException:
-        return     "Your Apple app site association is not properly configured."
+        return "Your Apple app site association is not properly configured."
       case .notSupportedException:
         return "Passkeys are not supported on this iOS version. Please use iOS 15 or above."
       case .pendingPasskeyRequestException:
@@ -26,7 +26,7 @@ extension AppError: LocalizedError {
       case .biometricException:
         return "Biometrics must be enabled"
       case .userCancelledException:
-        return "User cancelled the passkey interaction"
+        return "USER_CANCELLED"
       case .invalidChallengeException:
         return "The provided challenge was invalid"
       case .missingUserIdException:
