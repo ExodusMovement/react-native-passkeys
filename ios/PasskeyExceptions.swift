@@ -20,11 +20,11 @@ extension AppError: LocalizedError {
       case .notConfiguredException:
         return "Your Apple app site association is not properly configured."
       case .notSupportedException:
-        return "NotSupported: Passkeys are not supported on this iOS version. Please use iOS 15 or above."
+        return "NOT_SUPPORTED: Passkeys are not supported on this iOS version. Please use iOS 15 or above."
       case .pendingPasskeyRequestException:
         return "There is already a pending passkey request"
       case .biometricException:
-        return "NotSupported: Biometrics must be enabled"
+        return "NOT_SUPPORTED: Biometrics must be enabled"
       case .userCancelledException:
         return "USER_CANCELLED"
       case .invalidChallengeException:

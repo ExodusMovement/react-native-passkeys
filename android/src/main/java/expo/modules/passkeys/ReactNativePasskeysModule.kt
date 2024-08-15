@@ -110,13 +110,13 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
         return "Interrupted: ${e.errorMessage.toString()}"
       }
       is CreateCredentialProviderConfigurationException -> {
-        return "NotSupported: NotConfigured ${e.errorMessage.toString()}"
+        return "NOT_SUPPORTED: NotConfigured ${e.errorMessage.toString()}"
       }
       is CreateCredentialUnknownException -> {
         return "UnknownError: ${e.errorMessage.toString()}"
       }
       is CreateCredentialUnsupportedException -> {
-        return "NotSupported: ${e.errorMessage.toString()}"
+        return "NOT_SUPPORTED: ${e.errorMessage.toString()}"
       }
       else -> {
         return "UnhandledError: ${e.errorMessage.toString()}"
@@ -136,13 +136,13 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
         return "Interrupted: ${e.errorMessage.toString()}"
       }
       is GetCredentialProviderConfigurationException -> {
-        return "NotSupported: NotConfigured ${e.errorMessage.toString()}"
+        return "NOT_SUPPORTED: NotConfigured ${e.errorMessage.toString()}"
       }
       is GetCredentialUnknownException -> {
         return "UnknownError: ${e.errorMessage.toString()}"
       }
       is GetCredentialUnsupportedException -> {
-        return "NotSupported: ${e.errorMessage.toString()}"
+        return "NOT_SUPPORTED: ${e.errorMessage.toString()}"
       }
       is NoCredentialException -> {
         return "NoCredentials: ${e.errorMessage.toString()}"
