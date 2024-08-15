@@ -1,73 +1,64 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-import {SafeAreaView, Pressable, Text, View, StyleSheet} from 'react-native';
+import {SafeAreaView, Pressable, Text, StyleSheet} from 'react-native';
 import * as ReactNativePasskeys from '@exodus/react-native-passkeys';
 
+const RP_ID = 'pub-997edccf58a24892bbf821ac69d0575e.r2.dev';
+const USER1 = {
+  id: 'MQ',
+  name: 'user1',
+  displayName: 'User1',
+};
+const USER2 = {
+  id: 'Mg',
+  name: 'user2',
+  displayName: 'User2',
+};
+
 function App() {
+  const [registerCredential, setRegisterCredential] = useState<any>();
+
   const register = async () => {
-    console.log(4);
     try {
       const credential = await ReactNativePasskeys.create({
-        /*
-        challenge: 'nhkQXfE59Jb97VyyNJkvDiXucMEvltduvcrDmGrODHY',
-        rp: {
-          name: 'Passkey Test',
-          id: 'pub-997edccf58a24892bbf821ac69d0575e.r2.dev',
-        },
-        user: {
-          id: '2HzoHm_hY0CjuEESY9tY6-3SdjmNHOoNqaPDcZGzsr0',
-          name: 'Passkey Test',
-          displayName: 'Passkey Test',
-        },
-        pubKeyCredParams: [
-          {
-            type: 'public-key',
-            alg: -7,
-          },
-          {
-            type: 'public-key',
-            alg: -257,
-          },
-        ],
-        timeout: 1800000,
-        attestation: 'none',
-        excludeCredentials: [],
-        authenticatorSelection: {
-          // authenticatorAttachment: 'platform',
-          // requireResidentKey: false,
-          residentKey: 'required',
-          // userVerification: 'required',
-        },
-      });
-      */
-
         challenge: 'BGw59yIW2FjyFPwF1cPQbdu8tIYw2qlE8FWGwKLp_Fk',
         rp: {
-          id: 'pub-997edccf58a24892bbf821ac69d0575e.r2.dev',
+          id: RP_ID,
           name: 'Exodus',
         },
-        user: {
-          id: 'YQ==',
-          name: 'Name',
-          displayName: 'DisplayName',
-        },
+        user: USER1,
+        // user: USER2,
         pubKeyCredParams: [{alg: -7, type: 'public-key'}],
-        // authenticatorSelection: {
-        //   userVerification: 'required',
-        //   residentKey: 'required',
-        // },
-        // extensions: {largeBlob: {support: 'required'}},
         authenticatorSelection: {
-          // authenticatorAttachment: 'platform',
           residentKey: 'required',
-          // requireResidentKey: true,
-          // userVerification: 'preferred',
         },
+        extensions: {largeBlob: {support: 'required'}},
       });
-      console.log('credential', credential);
-    } catch (err) {
-      console.log(':: err', err);
-      throw err;
+      setRegisterCredential(credential);
+      console.log('register credential', credential);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const login = async () => {
+    try {
+      const credential = await ReactNativePasskeys.get({
+        rpId: RP_ID,
+        challenge: 'BGw59yIW2FjyFPwF1cPQbdu8tIYw2qlE8FWGwKLp_Fk',
+        userVerification: 'required',
+        ...(registerCredential && {
+          allowCredentials: [
+            {
+              id: registerCredential?.id,
+              type: 'public-key',
+            },
+          ],
+        }),
+      });
+      console.log('login credential', credential);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -75,6 +66,9 @@ function App() {
     <SafeAreaView style={styles.container}>
       <Pressable onPress={register}>
         <Text>Register</Text>
+      </Pressable>
+      <Pressable onPress={login}>
+        <Text>Login</Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -85,6 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 20,
   },
 });
 

@@ -1,7 +1,5 @@
 package expo.modules.passkeys
 
-import AuthenticationResponseJSON
-import RegistrationResponseJSON
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
@@ -72,9 +70,7 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
                 result?.data?.getString(
                         "androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON"
                 )
-        val createCredentialResponse =
-                Gson().fromJson(response, RegistrationResponseJSON::class.java)
-        promise.resolve(createCredentialResponse)
+        promise.resolve(response)
       } catch (e: CreateCredentialException) {
         promise.reject("Passkey Create", getRegistrationException(e), e)
       }
@@ -95,9 +91,7 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
                 result?.credential?.data?.getString(
                         "androidx.credentials.BUNDLE_KEY_AUTHENTICATION_RESPONSE_JSON"
                 )
-        val createCredentialResponse =
-                Gson().fromJson(response, AuthenticationResponseJSON::class.java)
-        promise.resolve(createCredentialResponse)
+        promise.resolve(response)
       } catch (e: GetCredentialException) {
         promise.reject("Passkey Get", getAuthenticationException(e), e)
       }
@@ -110,7 +104,7 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
         return "DomError: ${e.domError.toString()}"
       }
       is CreateCredentialCancellationException -> {
-        return "UserCancelled: ${e.errorMessage.toString()}"
+        return "USER_CANCELLED"
       }
       is CreateCredentialInterruptedException -> {
         return "Interrupted: ${e.errorMessage.toString()}"
@@ -130,31 +124,32 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
     }
   }
 
-  private fun getAuthenticationException(e: GetCredentialException) =
-          when (e) {
-            is GetPublicKeyCredentialDomException -> {
-              e.domError.toString()
-            }
-            is GetCredentialCancellationException -> {
-              "UserCancelled"
-            }
-            is GetCredentialInterruptedException -> {
-              "Interrupted"
-            }
-            is GetCredentialProviderConfigurationException -> {
-              "NotConfigured"
-            }
-            is GetCredentialUnknownException -> {
-              "UnknownError"
-            }
-            is GetCredentialUnsupportedException -> {
-              "NotSupported"
-            }
-            is NoCredentialException -> {
-              "NoCredentials"
-            }
-            else -> {
-              e.toString()
-            }
-          }
+  private fun getAuthenticationException(e: GetCredentialException): String {
+    when (e) {
+      is GetPublicKeyCredentialDomException -> {
+        return "DomError: ${e.domError.toString()}"
+      }
+      is GetCredentialCancellationException -> {
+        return "USER_CANCELLED"
+      }
+      is GetCredentialInterruptedException -> {
+        return "Interrupted: ${e.errorMessage.toString()}"
+      }
+      is GetCredentialProviderConfigurationException -> {
+        return "NotConfigured: ${e.errorMessage.toString()}"
+      }
+      is GetCredentialUnknownException -> {
+        return "UnknownError: ${e.errorMessage.toString()}"
+      }
+      is GetCredentialUnsupportedException -> {
+        return "NotSupported: ${e.errorMessage.toString()}"
+      }
+      is NoCredentialException -> {
+        return "NoCredentials: ${e.errorMessage.toString()}"
+      }
+      else -> {
+        return "UnhandledError: ${e.errorMessage.toString()}"
+      }
+    }
+  }
 }
