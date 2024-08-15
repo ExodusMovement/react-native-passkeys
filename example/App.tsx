@@ -35,7 +35,7 @@ function App() {
         extensions: {largeBlob: {support: 'required'}},
       });
       setRegisterCredential(credential);
-      console.log(':: register credential', credential);
+      console.log('register credential', credential);
     } catch (error) {
       console.error(error);
     }
