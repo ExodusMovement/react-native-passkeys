@@ -27,7 +27,7 @@
   "files": [
     "build",
     "ios",
-    "android",
+    "android/{src,build.gradle,settings.gradle,gradle.properties}",
     "exodus-react-native-passkeys.podspec"
   ],
   "devDependencies": {
