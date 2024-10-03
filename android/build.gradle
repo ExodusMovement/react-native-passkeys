@@ -60,11 +60,6 @@ android {
   lintOptions {
     abortOnError false
   }
-  publishing {
-    singleVariant("release") {
-      withSourcesJar()
-    }
-  }
 }
 
 repositories {
