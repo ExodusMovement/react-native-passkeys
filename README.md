@@ -52,7 +52,28 @@ Add the following to your `app.json`:
 
 Replace `<your_domain>` with the domain you are hosting the AASA file on. For example, if you are hosting the AASA file on `https://example.com/.well-known/apple-app-site-association`, you would add `example.com` to the `associatedDomains` array.
 
-#### 3. Prebuild and run your app
+#### 3. Add minimum deployment target
+
+Add the following to your `app.json`:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "15.0"
+          }
+        }
+      ]
+    ]
+  }
+}
+```
+
+#### 4. Prebuild and run your app
 
 ```sh
 npx expo prebuild -p ios
@@ -71,7 +92,7 @@ The file should be hosted at:
 https://<your_domain>/.well-known/assetlinks.json
 ```
 
-and should look something like this:
+and should look something like this (you can generate this file using the [Android Asset Links Assistant](https://developers.google.com/digital-asset-links/tools/generator)):
 
 ```json
 [

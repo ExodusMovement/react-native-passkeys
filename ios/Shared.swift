@@ -191,14 +191,16 @@ internal enum AttestationConveyancePreference: String, Codable {
     @available(iOS 15.0, *)
     func appleise() -> ASAuthorizationPublicKeyCredentialAttestationKind {
     switch self {
-      case .none:
-        return ASAuthorizationPublicKeyCredentialAttestationKind.none
       case .direct:
         return ASAuthorizationPublicKeyCredentialAttestationKind.direct
       case .indirect:
         return ASAuthorizationPublicKeyCredentialAttestationKind.indirect
       case .enterprise:
         return ASAuthorizationPublicKeyCredentialAttestationKind.enterprise
+      case .none:
+        return ASAuthorizationPublicKeyCredentialAttestationKind.none
+      default:
+        return ASAuthorizationPublicKeyCredentialAttestationKind.none
     }
   }
 }
