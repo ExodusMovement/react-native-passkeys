@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 import {SafeAreaView, Pressable, Text, StyleSheet} from 'react-native';
-import * as ReactNativePasskeys from '@exodus/react-native-passkeys';
+import * as ReactNativePasskeys from '@passkeys/react-native-passkeys';
 
 const RP_ID = 'pub-997edccf58a24892bbf821ac69d0575e.r2.dev';
 const USER1 = {
