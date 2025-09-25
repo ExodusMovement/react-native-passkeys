@@ -23,7 +23,7 @@ export async function create(
 		// - only largeBlob is supported currently on iOS
 		// - no extensions are currently supported on Android
 		extensions?: { largeBlob?: AuthenticationExtensionsLargeBlobInputs };
-	} & Pick<CredentialCreationOptions, "signal">,
+	} & { signal?: AbortSignal },
 ): Promise<RegistrationResponseJSON | null> {
 	return processResult(await ReactNativePasskeysModule.create(request));
 }
@@ -38,7 +38,7 @@ export async function get(
 	return processResult(await ReactNativePasskeysModule.get(request));
 }
 
-function processResult(result: any) {
+function processResult<T>(result: T) {
   // Android returns string, iOS returns object
   if (typeof result === "string") {
     return JSON.parse(result);
