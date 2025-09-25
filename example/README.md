@@ -1,9 +1,9 @@
 # Getting Started
 
 ```
-cd react-native-passkeys/example
-yarn link ..
 yarn 
-build and run Android app
-yarn metro
+yarn build
+cd example
+cd ios && pod install && cd ..
+yarn ios
 ```

@@ -21,7 +21,13 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
 
     @available(iOS 13.0, *)
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return UIApplication.shared.keyWindow ?? ASPresentationAnchor()
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first,
+            let window = windowScene.windows.first else {
+            return ASPresentationAnchor()
+        }
+        return window
     }
 
     @available(iOS 13.0, *)
@@ -69,7 +75,7 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
                 clientExtensionResults: clientExtensionResults
             )
 
-            handler.onSuccess(Either(registrationResult))
+            handler.onSuccess(.registration(registrationResult))
 
         case let credential as ASAuthorizationSecurityKeyPublicKeyCredentialRegistration:
             if credential.rawAttestationObject == nil {
@@ -89,7 +95,7 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
                 response: response
             )
 
-            handler.onSuccess(Either(registrationResult))
+            handler.onSuccess(.registration(registrationResult))
 
         case let credential as ASAuthorizationPlatformPublicKeyCredentialAssertion:
             var largeBlob: AuthenticationExtensionsLargeBlobOutputsJSON? =
@@ -121,7 +127,7 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
                 clientExtensionResults: clientExtensionResults
             )
 
-            handler.onSuccess(Either(assertionResult))
+            handler.onSuccess(.authentication(assertionResult))
 
         case let credential as ASAuthorizationSecurityKeyPublicKeyCredentialAssertion:
             let response = AuthenticatorAssertionResponseJSON(
@@ -137,7 +143,7 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
                 response: response
             )
 
-            handler.onSuccess(Either(assertionResult))
+            handler.onSuccess(.authentication(assertionResult))
         default:
             handler.onFailure((ASAuthorizationError(ASAuthorizationError.Code.failed)))
         }
