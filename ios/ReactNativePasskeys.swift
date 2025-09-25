@@ -5,7 +5,7 @@ import AuthenticationServices
 
 @available(iOS 15.0, *)
 struct PasskeyContext {
-  let passkeyDelegate: PassKeyDelegate
+  let passkeyDelegate: PasskeyDelegate
   struct Promise {
     let resolve: RCTPromiseResolveBlock
     let reject: RCTPromiseRejectBlock
@@ -70,7 +70,7 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
 
       let _ = try isAvailable()
 
-      let passkeyDelegate = PassKeyDelegate(handler: self)
+      let passkeyDelegate = PasskeyDelegate(handler: self)
       let promise = PasskeyContext.Promise(
         resolve: resolve,
         reject: reject
@@ -173,7 +173,7 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
       let _ = try isAvailable()
 
 
-      let passkeyDelegate = PassKeyDelegate(handler: self)
+      let passkeyDelegate = PasskeyDelegate(handler: self)
       let promise = PasskeyContext.Promise(
         resolve: resolve,
         reject: reject

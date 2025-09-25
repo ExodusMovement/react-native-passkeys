@@ -1,12 +1,6 @@
 import AuthenticationServices
-import ExpoModulesCore
 // ! adapted from https://github.com/f-23/react-native-passkey/blob/fdcf7cf297debb247ada6317337767072158629c/ios/PasskeyDelegate.swift
 import Foundation
-
-protocol PasskeyResultHandler {
-    func onSuccess(_ data: PublicKeyCredentialJSON)
-    func onFailure(_ error: Error)
-}
 
 class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
     ASAuthorizationControllerPresentationContextProviding
@@ -38,12 +32,12 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
         handler.onFailure(error)
     }
 
-    @available(iOS 15.0, *)
+    @available(iOS 13.4, *)
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithAuthorization authorization: ASAuthorization
     ) {
-
+      if #available(iOS 15.0, *) {
         switch authorization.credential {
         case let credential as ASAuthorizationPlatformPublicKeyCredentialRegistration:
             if credential.rawAttestationObject == nil {
@@ -53,29 +47,26 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
             var largeBlob: AuthenticationExtensionsLargeBlobOutputsJSON?
             if #available(iOS 17.0, *) {
                 largeBlob = AuthenticationExtensionsLargeBlobOutputsJSON(
-                    supported: Field.init(wrappedValue: credential.largeBlob?.isSupported)
+                    supported: credential.largeBlob?.isSupported
                 )
             }
 
             let clientExtensionResults = AuthenticationExtensionsClientOutputsJSON(
-                largeBlob: Field.init(wrappedValue: largeBlob)
+                largeBlob: largeBlob
             )
 
             let response = AuthenticatorAttestationResponseJSON(
-                clientDataJSON: Field.init(
-                    wrappedValue: credential.rawClientDataJSON.toBase64URLEncodedString()),
-                publicKey: Field.init(
-                    wrappedValue: getPublicKey(from: credential.rawAttestationObject!)?
-                        .toBase64URLEncodedString()),
-                attestationObject: Field.init(
-                    wrappedValue: credential.rawAttestationObject!.toBase64URLEncodedString())
+                clientDataJSON: credential.rawClientDataJSON.toBase64URLEncodedString(),
+                publicKey: getPublicKey(from: credential.rawAttestationObject!)?
+                    .toBase64URLEncodedString(),
+                attestationObject: credential.rawAttestationObject!.toBase64URLEncodedString()
             )
 
             let registrationResult = RegistrationResponseJSON(
-                id: Field.init(wrappedValue: credential.credentialID.toBase64URLEncodedString()),
-                rawId: Field.init(wrappedValue: credential.credentialID.toBase64URLEncodedString()),
-                response: Field.init(wrappedValue: response),
-                clientExtensionResults: Field.init(wrappedValue: clientExtensionResults)
+                id: credential.credentialID.toBase64URLEncodedString(),
+                rawId: credential.credentialID.toBase64URLEncodedString(),
+                response: response,
+                clientExtensionResults: clientExtensionResults
             )
 
             handler.onSuccess(Either(registrationResult))
@@ -86,19 +77,16 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
             }
 
             let response = AuthenticatorAttestationResponseJSON(
-                clientDataJSON: Field.init(
-                    wrappedValue: credential.rawClientDataJSON.toBase64URLEncodedString()),
-                publicKey: Field.init(
-                    wrappedValue: getPublicKey(from: credential.rawAttestationObject!)?
-                        .toBase64URLEncodedString()),
-                attestationObject: Field.init(
-                    wrappedValue: credential.rawAttestationObject!.toBase64URLEncodedString())
+                clientDataJSON: credential.rawClientDataJSON.toBase64URLEncodedString(),
+                publicKey: getPublicKey(from: credential.rawAttestationObject!)?
+                    .toBase64URLEncodedString(),
+                attestationObject: credential.rawAttestationObject!.toBase64URLEncodedString()
             )
 
             let registrationResult = RegistrationResponseJSON(
-                id: Field.init(wrappedValue: credential.credentialID.toBase64URLEncodedString()),
-                rawId: Field.init(wrappedValue: credential.credentialID.toBase64URLEncodedString()),
-                response: Field.init(wrappedValue: response)
+                id: credential.credentialID.toBase64URLEncodedString(),
+                rawId: credential.credentialID.toBase64URLEncodedString(),
+                response: response
             )
 
             handler.onSuccess(Either(registrationResult))
@@ -117,48 +105,45 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
             }
 
             let clientExtensionResults = AuthenticationExtensionsClientOutputsJSON(
-                largeBlob: Field.init(wrappedValue: largeBlob))
+                largeBlob: largeBlob)
 
             let response = AuthenticatorAssertionResponseJSON(
-                authenticatorData: Field.init(
-                    wrappedValue: credential.rawAuthenticatorData.toBase64URLEncodedString()),
-                clientDataJSON: Field.init(
-                    wrappedValue: credential.rawClientDataJSON.toBase64URLEncodedString()),
-                signature: Field.init(
-                    wrappedValue: credential.signature!.toBase64URLEncodedString()),
-                userHandle: Field.init(wrappedValue: credential.userID!.toBase64URLEncodedString())
+                authenticatorData: credential.rawAuthenticatorData.toBase64URLEncodedString(),
+                clientDataJSON: credential.rawClientDataJSON.toBase64URLEncodedString(),
+                signature: credential.signature!.toBase64URLEncodedString(),
+                userHandle: credential.userID!.toBase64URLEncodedString()
             )
 
             let assertionResult = AuthenticationResponseJSON(
-                id: Field.init(wrappedValue: credential.credentialID.toBase64URLEncodedString()),
-                rawId: Field.init(wrappedValue: credential.credentialID.toBase64URLEncodedString()),
-                response: Field.init(wrappedValue: response),
-                clientExtensionResults: Field.init(wrappedValue: clientExtensionResults)
+                id: credential.credentialID.toBase64URLEncodedString(),
+                rawId: credential.credentialID.toBase64URLEncodedString(),
+                response: response,
+                clientExtensionResults: clientExtensionResults
             )
 
             handler.onSuccess(Either(assertionResult))
 
         case let credential as ASAuthorizationSecurityKeyPublicKeyCredentialAssertion:
             let response = AuthenticatorAssertionResponseJSON(
-                authenticatorData: Field.init(
-                    wrappedValue: credential.rawAuthenticatorData.toBase64URLEncodedString()),
-                clientDataJSON: Field.init(
-                    wrappedValue: credential.rawClientDataJSON.toBase64URLEncodedString()),
-                signature: Field.init(
-                    wrappedValue: credential.signature!.toBase64URLEncodedString()),
-                userHandle: Field.init(wrappedValue: credential.userID!.toBase64URLEncodedString())
+                authenticatorData: credential.rawAuthenticatorData.toBase64URLEncodedString(),
+                clientDataJSON: credential.rawClientDataJSON.toBase64URLEncodedString(),
+                signature: credential.signature!.toBase64URLEncodedString(),
+                userHandle: credential.userID!.toBase64URLEncodedString()
             )
 
             let assertionResult = AuthenticationResponseJSON(
-                id: Field.init(wrappedValue: credential.credentialID.toBase64URLEncodedString()),
-                rawId: Field.init(wrappedValue: credential.credentialID.toBase64URLEncodedString()),
-                response: Field.init(wrappedValue: response)
+                id: credential.credentialID.toBase64URLEncodedString(),
+                rawId: credential.credentialID.toBase64URLEncodedString(),
+                response: response
             )
 
             handler.onSuccess(Either(assertionResult))
         default:
             handler.onFailure((ASAuthorizationError(ASAuthorizationError.Code.failed)))
         }
+      } else {
+        // Fallback on earlier versions
+      }
     }
 }
 

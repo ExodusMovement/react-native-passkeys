@@ -2093,11 +2093,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@passkeys/react-native-passkeys@portal:/Users/janexodus/workspace/react-native-passkeys::locator=hello%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@passkeys/react-native-passkeys@portal:/Users/janexodus/workspace/react-native-passkeys::locator=hello%40workspace%3A."
+"@passkeys/react-native-passkeys@npm:0.3.3-alpha.0":
+  version: 0.3.3-alpha.0
+  resolution: "@passkeys/react-native-passkeys@npm:0.3.3-alpha.0"
+  checksum: 33837e68faaf9aa90a5e5a388333cac1800301aea40f2fe78fe2dc8bb23e3aa1bf3c695e0671ccf615ab84257f1bba78f7a74feac831339ce48383a26e396edb
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
@@ -3416,11 +3417,11 @@ __metadata:
   linkType: hard
 
 "baseline-browser-mapping@npm:^2.8.3":
-  version: 2.8.6
-  resolution: "baseline-browser-mapping@npm:2.8.6"
+  version: 2.8.7
+  resolution: "baseline-browser-mapping@npm:2.8.7"
   bin:
     baseline-browser-mapping: dist/cli.js
-  checksum: 113a89acbc7cbcb0ca191ff2498f33f64be3fac90b58bf7c192a325654a436fd7abe9ad98e24394d16c1be102b6e905483181182df69e79f090f180fac1bcbbc
+  checksum: 15a46675aeec236e831644922569863eccb068a1a0131806e91ff0c263bbe6e351825b52cdc6905abf304946997dd8460fd9d3103818ddf4771e2ca0bb3e2de9
   languageName: node
   linkType: hard
 
@@ -5259,7 +5260,7 @@ __metadata:
     "@babel/core": ^7.20.0
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
-    "@passkeys/react-native-passkeys": ^0.3.3
+    "@passkeys/react-native-passkeys": 0.3.3-alpha.0
     "@react-native/babel-preset": 0.74.87
     "@react-native/eslint-config": 0.74.87
     "@react-native/metro-config": 0.74.87

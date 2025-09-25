@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@passkeys/react-native-passkeys": "^0.3.3",
+    "@passkeys/react-native-passkeys": "0.3.3-alpha.0",
     "react": "18.2.0",
     "react-native": "0.74.5"
   },
@@ -33,8 +33,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "resolutions": {
-    "@passkeys/react-native-passkeys": "portal:/Users/janexodus/workspace/react-native-passkeys"
   }
 }
