@@ -243,21 +243,17 @@ extension LAContext {
       return .none
     }
 
-    if #available(iOS 11.0, *) {
-      switch self.biometryType {
-        case .none:
-          return .none
-        case .touchID:
-          return .touchID
-        case .faceID:
-          return .faceID
-        case .opticID:
-          return .opticID
-        @unknown default:
-          return .none
-      }
-    } else {
-      return  self.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) ? .touchID : .none
+    switch self.biometryType {
+      case .none:
+        return .none
+      case .touchID:
+        return .touchID
+      case .faceID:
+        return .faceID
+      case .opticID:
+        return .opticID
+      @unknown default:
+        return .none
     }
   }
 }

@@ -12,14 +12,12 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
     }
 
     // Perform the authorization request for a given ASAuthorizationController instance
-    @available(iOS 15.0, *)
     func performAuthForController(controller: ASAuthorizationController) {
         controller.delegate = self
         controller.presentationContextProvider = self
         controller.performRequests()
     }
 
-    @available(iOS 13.0, *)
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         guard let windowScene = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
@@ -30,7 +28,6 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
         return window
     }
 
-    @available(iOS 13.0, *)
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithError error: Error
@@ -38,12 +35,10 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
         handler.onFailure(error)
     }
 
-    @available(iOS 13.4, *)
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithAuthorization authorization: ASAuthorization
     ) {
-      if #available(iOS 15.0, *) {
         switch authorization.credential {
         case let credential as ASAuthorizationPlatformPublicKeyCredentialRegistration:
             if credential.rawAttestationObject == nil {
@@ -147,9 +142,6 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
         default:
             handler.onFailure((ASAuthorizationError(ASAuthorizationError.Code.failed)))
         }
-      } else {
-        // Fallback on earlier versions
-      }
     }
 }
 

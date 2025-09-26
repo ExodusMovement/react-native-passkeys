@@ -199,7 +199,6 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
   }
 }
 
-@available(iOS 15.0, *)
 private func preparePlatformRegistrationRequest(challenge: Data,
                                                 userId: Data,
                                                 request: PublicKeyCredentialCreationOptions) -> ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest {

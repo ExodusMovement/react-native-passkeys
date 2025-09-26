@@ -1,7 +1,6 @@
 /**
     Specification reference: https://w3c.github.io/webauthn/#typedefdef-publickeycredentialjson
 */
-@available(iOS 15.0, *)
 enum PublicKeyCredentialJSONResponse {
   case registration(RegistrationResponseJSON)
   case authentication(AuthenticationResponseJSON)
@@ -10,7 +9,6 @@ enum PublicKeyCredentialJSONResponse {
 /**
     Specification reference: https://w3c.github.io/webauthn/#dictdef-registrationresponsejson
 */
-@available(iOS 15.0, *)
 internal struct RegistrationResponseJSON: Codable {
   var id: Base64URLString
   var rawId: Base64URLString
@@ -23,7 +21,6 @@ internal struct RegistrationResponseJSON: Codable {
 /**
     Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticatorattestationresponsejson
 */
-@available(iOS 15.0, *)
 internal struct AuthenticatorAttestationResponseJSON: Codable {
   var clientDataJSON: Base64URLString
   // - Required in L3 but not in L2 so leaving optional as most have not adapted L3 yet
