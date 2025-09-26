@@ -3,9 +3,8 @@ import LocalAuthentication
 import AuthenticationServices
 
 
-@available(iOS 15.0, *)
 struct PasskeyContext {
-  let passkeyDelegate: PassKeyDelegate
+  let passkeyDelegate: PasskeyDelegate
   struct Promise {
     let resolve: RCTPromiseResolveBlock
     let reject: RCTPromiseRejectBlock
@@ -28,18 +27,17 @@ func handleASAuthorizationError(error: NSError) -> Error {
 }
 
 
-@available(iOS 15.0, *)
 @objc(ReactNativePasskeys)
 class ReactNativePasskeys: NSObject, PasskeyResultHandler {
   private var passkeyContext: PasskeyContext?
 
-   func isSupported() -> Bool {
-          if #available(iOS 15.0, *) {
-              return true
-          } else {
-              return false
-          }
+  func isSupported() -> Bool {
+      if #available(iOS 15.0, *) {
+          return true
+      } else {
+          return false
       }
+  }
 
   private func isAvailable() throws -> Bool {
     if #unavailable(iOS 15.0) {
@@ -70,7 +68,7 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
 
       let _ = try isAvailable()
 
-      let passkeyDelegate = PassKeyDelegate(handler: self)
+      let passkeyDelegate = PasskeyDelegate(handler: self)
       let promise = PasskeyContext.Promise(
         resolve: resolve,
         reject: reject
@@ -173,7 +171,7 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
       let _ = try isAvailable()
 
 
-      let passkeyDelegate = PassKeyDelegate(handler: self)
+      let passkeyDelegate = PasskeyDelegate(handler: self)
       let promise = PasskeyContext.Promise(
         resolve: resolve,
         reject: reject
@@ -201,7 +199,6 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
   }
 }
 
-@available(iOS 15.0, *)
 private func preparePlatformRegistrationRequest(challenge: Data,
                                                 userId: Data,
                                                 request: PublicKeyCredentialCreationOptions) -> ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest {

@@ -8,6 +8,7 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
+    "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": ["esnext"],
@@ -25,5 +26,5 @@
     "target": "esnext",
     "verbatimModuleSyntax": true
   },
-  "exclude": ["example"]
+  "exclude": ["example", "build"]
 }

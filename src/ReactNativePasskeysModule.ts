@@ -1,13 +1,33 @@
 import { NativeModules, Platform } from 'react-native';
 
-const LINKING_ERROR =
-  `The package 'react-native-passkeys' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
+import type {
+  PublicKeyCredentialCreationOptionsJSON,
+  RegistrationResponseJSON,
+} from "./ReactNativePasskeys.types";
 
-const ReactNativePasskeys = NativeModules.ReactNativePasskeys
-  ? NativeModules.ReactNativePasskeys
+const LINKING_ERROR =
+  `The package 'react-native-passkeys' doesn't seem to be linked. Make sure: \n\n${Platform.select({ ios: "- You have run 'pod install'\n", default: '' })}- You rebuilt the app after installing the package\n- You are not using Expo Go\n`;
+
+const passkeys = NativeModules.ReactNativePasskeys
+
+const ReactNativePasskeys = passkeys
+  ? {
+    ...passkeys,
+    async create(
+      request: PublicKeyCredentialCreationOptionsJSON,
+    ): Promise<RegistrationResponseJSON | null> {
+      const credential = await passkeys.create(request);
+      return {
+        ...credential,
+        response: {
+          ...credential.response,
+          getPublicKey() {
+            return credential.response?.publicKey;
+          },
+        },
+      };
+    },
+  }
   : new Proxy(
     {},
     {

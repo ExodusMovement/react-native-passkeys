@@ -10,9 +10,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "@passkeys/react-native-passkeys": "portal:../",
     "react": "18.2.0",
-    "react-native": "0.74.5",
-    "@exodus/react-native-passkeys": "link:@exodus/react-native-passkeys"
+    "react-native": "0.74.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
