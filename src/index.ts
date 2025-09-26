@@ -10,21 +10,18 @@ import type {
 // and on native platforms to ReactNativePasskeys.ts
 import ReactNativePasskeysModule from "./ReactNativePasskeysModule";
 
-export function isSupported(): boolean {
-	return ReactNativePasskeysModule.isSupported();
-}
-
-export function isAutoFillAvailable(): boolean {
-	return ReactNativePasskeysModule.isAutoFillAvalilable();
-}
-
 export async function create(
-	request: Omit<PublicKeyCredentialCreationOptionsJSON, "extensions"> & {
+  { signal, ...request }: Omit<PublicKeyCredentialCreationOptionsJSON, "extensions"> & {
 		// - only largeBlob is supported currently on iOS
 		// - no extensions are currently supported on Android
 		extensions?: { largeBlob?: AuthenticationExtensionsLargeBlobInputs };
 	} & { signal?: AbortSignal },
 ): Promise<RegistrationResponseJSON | null> {
+
+  if (signal) {
+    console.warn('AbortSignal is currently not supported and will be ignored.');
+  }
+
 	return processResult(await ReactNativePasskeysModule.create(request));
 }
 
