@@ -62,11 +62,8 @@ internal struct AuthenticatorAssertionResponseJSON: Codable {
     Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticationextensionsclientoutputsjson
 */
 internal struct  AuthenticationExtensionsClientOutputsJSON: Codable {
-
-  // ? this is only available in iOS 17 but I cannot set this here
-  // @available(iOS 17.0, *)
   var largeBlob: AuthenticationExtensionsLargeBlobOutputsJSON?
-
+  var prf: AuthenticationExtensionsPRFOutputsJSON?
 }
 
 /**
@@ -79,4 +76,18 @@ internal struct AuthenticationExtensionsLargeBlobOutputsJSON: Codable {
   var supported: Bool?
   var blob: Base64URLString?
   var written: Bool?
+}
+
+
+internal struct AuthenticationExtensionsPRFValuesJSON: Codable {
+  var first: Base64URLString
+  var second: Base64URLString?
+}
+
+/**
+ Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticationextensionsprfoutputs
+ */
+internal struct AuthenticationExtensionsPRFOutputsJSON: Codable {
+  var enabled: Bool?
+  var results: AuthenticationExtensionsPRFValuesJSON?
 }

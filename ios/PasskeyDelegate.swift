@@ -51,9 +51,20 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
                     supported: credential.largeBlob?.isSupported
                 )
             }
+          
+            var prf: AuthenticationExtensionsPRFOutputsJSON?
+            if #available(iOS 18.0, *) {
+              prf = credential.prf.map { it in AuthenticationExtensionsPRFOutputsJSON(
+                enabled: it.isSupported,
+                results: it.first.map { first in AuthenticationExtensionsPRFValuesJSON(first: first.serialize(), second: it.second.serialize()) }
+              )
+              }
+            }
+  
 
             let clientExtensionResults = AuthenticationExtensionsClientOutputsJSON(
-                largeBlob: largeBlob
+                largeBlob: largeBlob,
+                prf: prf
             )
 
             let response = AuthenticatorAttestationResponseJSON(
@@ -104,9 +115,19 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
                 @unknown default: break
                 }
             }
+          
+            var prf: AuthenticationExtensionsPRFOutputsJSON?
+            if #available(iOS 18.0, *) {
+              prf = credential.prf.map { AuthenticationExtensionsPRFOutputsJSON(
+                  results: AuthenticationExtensionsPRFValuesJSON(first: $0.first.serialize(), second: $0.second.serialize())
+                )
+              }
+            }
 
             let clientExtensionResults = AuthenticationExtensionsClientOutputsJSON(
-                largeBlob: largeBlob)
+                largeBlob: largeBlob,
+                prf: prf
+            )
 
             let response = AuthenticatorAssertionResponseJSON(
                 authenticatorData: credential.rawAuthenticatorData.toBase64URLEncodedString(),

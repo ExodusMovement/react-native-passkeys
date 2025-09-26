@@ -1,6 +1,7 @@
 import Foundation
 import AuthenticationServices
 import LocalAuthentication
+import CryptoKit
 
 typealias Base64URLString = String
 
@@ -217,8 +218,18 @@ internal struct AuthenticationExtensionsLargeBlobInputs: Codable {
 }
 
 
+internal struct AuthenticationExtensionsPrfEvalInputs: Codable {
+  var first: Base64URLString
+  var second: Base64URLString?
+}
+
+internal struct AuthenticationExtensionsPrfInputs: Codable {
+  var eval: AuthenticationExtensionsPrfEvalInputs
+}
+
 internal struct AuthenticationExtensionsClientInputs: Codable {
   var largeBlob: AuthenticationExtensionsLargeBlobInputs?
+  var prf: AuthenticationExtensionsPrfInputs?
 }
 
 
@@ -266,3 +277,19 @@ extension Encodable {
   }
 }
 
+
+extension SymmetricKey {
+
+    func serialize() -> String {
+        return self.withUnsafeBytes { body in
+            Data(body).base64EncodedString()
+        }
+    }
+}
+
+extension SymmetricKey? {
+
+    func serialize() -> String? {
+      return self.map { $0.serialize() }
+    }
+}

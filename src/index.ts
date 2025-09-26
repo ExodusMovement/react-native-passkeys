@@ -1,5 +1,6 @@
 import type {
 	AuthenticationExtensionsLargeBlobInputs,
+  AuthenticationExtensionsPrfInputs,
 	AuthenticationResponseJSON,
 	PublicKeyCredentialCreationOptionsJSON,
 	PublicKeyCredentialRequestOptionsJSON,
@@ -14,7 +15,7 @@ export async function create(
   { signal, ...request }: Omit<PublicKeyCredentialCreationOptionsJSON, "extensions"> & {
 		// - only largeBlob is supported currently on iOS
 		// - no extensions are currently supported on Android
-		extensions?: { largeBlob?: AuthenticationExtensionsLargeBlobInputs };
+		extensions?: { largeBlob?: AuthenticationExtensionsLargeBlobInputs, prf?: AuthenticationExtensionsPrfInputs };
 	} & { signal?: AbortSignal },
 ): Promise<RegistrationResponseJSON | null> {
 

@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@exodus/bytes": "^1.0.0-rc.2",
     "@passkeys/react-native-passkeys": "portal:../",
     "react": "18.2.0",
     "react-native": "0.74.5"
