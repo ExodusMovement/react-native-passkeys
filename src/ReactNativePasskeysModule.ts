@@ -1,5 +1,4 @@
 import { NativeModules, Platform } from 'react-native';
-import { NotSupportedError } from './errors';
 
 import type {
   PublicKeyCredentialCreationOptionsJSON,
@@ -17,8 +16,6 @@ const ReactNativePasskeys = passkeys
     async create(
       request: PublicKeyCredentialCreationOptionsJSON,
     ): Promise<RegistrationResponseJSON | null> {
-      if (!this.isSupported) throw new NotSupportedError();
-
       const credential = await passkeys.create(request);
       return {
         ...credential,
