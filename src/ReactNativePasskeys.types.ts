@@ -15,7 +15,7 @@ import type {
 	AttestationConveyancePreference,
 	AuthenticatorSelectionCriteria,
 	PublicKeyCredentialParameters,
-} from "@simplewebauthn/typescript-types";
+} from '@simplewebauthn/typescript-types'
 
 export type {
 	AttestationConveyancePreference,
@@ -36,7 +36,7 @@ export type {
 	PublicKeyCredentialUserEntity,
 	RegistrationCredential,
 	UserVerificationRequirement,
-} from "@simplewebauthn/typescript-types";
+} from '@simplewebauthn/typescript-types'
 
 export type {
 	Base64URLString,
@@ -45,7 +45,7 @@ export type {
 	PublicKeyCredentialDescriptorJSON,
 	PublicKeyCredentialUserEntityJSON,
 	AuthenticatorAttestationResponseJSON,
-};
+}
 
 /**
  * A variant of PublicKeyCredentialCreationOptions suitable for JSON transmission
@@ -122,6 +122,14 @@ export interface AuthenticatorAssertionResponseJSON {
 	userHandle?: string;
 }
 
+
+/**
+ * - Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticationextensionsprfvalues
+ */
+export interface AuthenticationExtensionsPrfInputs {
+	eval: { first: Base64URLString; second?: Base64URLString }
+}
+
 /**
  * TypeScript's types are behind the latest extensions spec, so we define them here.
  * Should eventually be replaced by TypeScript's when TypeScript gets updated to
@@ -132,9 +140,10 @@ export interface AuthenticatorAssertionResponseJSON {
 export interface AuthenticationExtensionsClientInputs
 	extends TypeScriptAuthenticationExtensionsClientInputs {
 	largeBlob?: AuthenticationExtensionsLargeBlobInputs;
+	prf?: AuthenticationExtensionsPrfInputs;
 }
 
-export type LargeBlobSupport = "preferred" | "required";
+export type LargeBlobSupport = 'preferred' | 'required';
 
 /**
  * - Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticationextensionslargeblobinputs
@@ -153,7 +162,7 @@ export interface AuthenticationExtensionsLargeBlobInputs {
 
 // - largeBlob extension: https://w3c.github.io/webauthn/#sctn-large-blob-extension
 export interface AuthenticationExtensionsClientOutputs {
-	largeBlob?: Omit<AuthenticationExtensionsLargeBlobOutputs, "blob"> & {
+	largeBlob?: Omit<AuthenticationExtensionsLargeBlobOutputs, 'blob'> & {
 		blob?: ArrayBuffer;
 	};
 }
@@ -181,8 +190,8 @@ export interface AuthenticationExtensionsLargeBlobOutputs {
  * A library specific type that combines the JSON results of a registration operation with a method
  * to get the public key of the new credential since these are not available directly from the native side
  */
-export interface CreationReponse extends Omit<RegistrationResponseJSON, "response"> {
-	response: RegistrationResponseJSON["response"] & {
+export interface CreationReponse extends Omit<RegistrationResponseJSON, 'response'> {
+	response: RegistrationResponseJSON['response'] & {
 		/**
 		 * This operation returns an ArrayBuffer containing the DER SubjectPublicKeyInfo of the new credential, or null if this is not available.
 		 * https://w3c.github.io/webauthn/#dom-authenticatorattestationresponse-getpublickey
