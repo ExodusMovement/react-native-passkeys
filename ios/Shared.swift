@@ -59,7 +59,6 @@ internal enum AuthenticatorTransport: String, Codable {
   case smartCard = "smart-card"
 
 
-    @available(iOS 15.0, *)
     func appleise() -> ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport? {
     switch self {
       case .ble:
@@ -103,7 +102,6 @@ internal struct PublicKeyCredentialParameters: Codable {
   var alg: COSEAlgorithmIdentifier = -7
   var type: PublicKeyCredentialType = .publicKey
 
-    @available(iOS 15.0, *)
     func appleise() -> ASAuthorizationPublicKeyCredentialParameters {
         return ASAuthorizationPublicKeyCredentialParameters.init(algorithm: ASCOSEAlgorithmIdentifier(rawValue: self.alg))
   }
@@ -114,7 +112,6 @@ internal enum ResidentKeyRequirement: String, Codable {
   case preferred
   case required
 
-    @available(iOS 15.0, *)
     func appleise() -> ASAuthorizationPublicKeyCredentialResidentKeyPreference {
     switch self {
       case .discouraged:
@@ -134,7 +131,6 @@ internal enum UserVerificationRequirement: String, Codable {
   case preferred
   case required
 
-    @available(iOS 15.0, *)
     func appleise () -> ASAuthorizationPublicKeyCredentialUserVerificationPreference {
     switch self {
       case .discouraged:
@@ -156,12 +152,10 @@ internal struct PublicKeyCredentialDescriptor: Codable {
   var transports: [AuthenticatorTransport]?
   var type: PublicKeyCredentialType = .publicKey
 
-    @available(iOS 15.0, *)
     func getPlatformDescriptor() -> ASAuthorizationPlatformPublicKeyCredentialDescriptor {
     return ASAuthorizationPlatformPublicKeyCredentialDescriptor.init(credentialID: Data(base64URLEncoded: self.id)!)
   }
 
-    @available(iOS 15.0, *)
     func getCrossPlatformDescriptor() -> ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor {
     var transports = ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport.allSupported
 
@@ -188,7 +182,6 @@ internal enum AttestationConveyancePreference: String, Codable {
   case indirect
   case none
 
-    @available(iOS 15.0, *)
     func appleise() -> ASAuthorizationPublicKeyCredentialAttestationKind {
     switch self {
       case .direct:
@@ -230,8 +223,7 @@ internal struct AuthenticationExtensionsClientInputs: Codable {
 
 
 protocol PasskeyResultHandler {
-    @available(iOS 15.0, *)
-    func onSuccess(_ data: PublicKeyCredentialJSONResponse)
+  func onSuccess(_ data: PublicKeyCredentialJSONResponse)
   func onFailure(_ error: Error)
 }
 
