@@ -230,10 +230,11 @@ private func preparePlatformRegistrationRequest(challenge: Data,
   
   if #available(iOS 18, *) {
     if let prf = request.extensions?.prf {
-      let first = Data(base64URLEncoded: prf.eval.first)!
-      let second = prf.eval.second.flatMap { Data(base64URLEncoded: $0) }
-      let inputValues = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: first, saltInput2: second)
-      platformKeyRegistrationRequest.prf = ASAuthorizationPublicKeyCredentialPRFRegistrationInput.inputValues(inputValues)
+      platformKeyRegistrationRequest.prf = prf.eval.map { eval in
+        let first = Data(base64URLEncoded: eval.first)!
+        let second = eval.second.flatMap { Data(base64URLEncoded: $0) }
+        return .inputValues(ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: first, saltInput2: second))
+      } ?? .checkForSupport
     }
   }
 
@@ -340,12 +341,11 @@ private func preparePlatformAssertionRequest(challenge: Data, request: PublicKey
      
     
   if #available(iOS 18, *) {
-    if let prf = request.extensions?.prf {
-      let first = Data(base64URLEncoded: prf.eval.first)!
-      let second = prf.eval.second.flatMap { Data(base64URLEncoded: $0) }
-      let inputValues = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: first, saltInput2: second)
-      platformKeyAssertionRequest.prf = ASAuthorizationPublicKeyCredentialPRFAssertionInput.inputValues(inputValues)
-    }
+      platformKeyAssertionRequest.prf = request.extensions?.prf?.eval.map { eval in
+        let first = Data(base64URLEncoded: eval.first)!
+        let second = eval.second.flatMap { Data(base64URLEncoded: $0) }
+        return .inputValues(ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: first, saltInput2: second))
+      }
   }
 
   // TODO: integrate this

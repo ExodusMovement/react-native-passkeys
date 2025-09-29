@@ -39,11 +39,7 @@ function App() {
         },
         extensions: {
           largeBlob: {support: 'required'},
-          prf: {
-            eval: {
-              first: toBase64url(new TextEncoder().encode('1234567890')),
-            },
-          },
+          prf: {},
         },
       });
       if (!credential) {
