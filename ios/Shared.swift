@@ -282,7 +282,7 @@ extension SymmetricKey {
 
     func serialize() -> String {
         return self.withUnsafeBytes { body in
-            Data(body).base64EncodedString()
+            Data(body).toBase64URLEncodedString()
         }
     }
 }
