@@ -127,7 +127,7 @@ export interface AuthenticatorAssertionResponseJSON {
  * - Specification reference: https://w3c.github.io/webauthn/#dictdef-authenticationextensionsprfvalues
  */
 export interface AuthenticationExtensionsPrfInputs {
-	eval: { first: Base64URLString; second?: Base64URLString }
+	eval?: { first: Base64URLString; second?: Base64URLString }
 }
 
 /**
@@ -190,7 +190,7 @@ export interface AuthenticationExtensionsLargeBlobOutputs {
  * A library specific type that combines the JSON results of a registration operation with a method
  * to get the public key of the new credential since these are not available directly from the native side
  */
-export interface CreationReponse extends Omit<RegistrationResponseJSON, 'response'> {
+export interface CreationResponse extends Omit<RegistrationResponseJSON, 'response'> {
 	response: RegistrationResponseJSON['response'] & {
 		/**
 		 * This operation returns an ArrayBuffer containing the DER SubjectPublicKeyInfo of the new credential, or null if this is not available.

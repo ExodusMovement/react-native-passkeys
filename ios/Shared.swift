@@ -224,7 +224,7 @@ internal struct AuthenticationExtensionsPrfEvalInputs: Codable {
 }
 
 internal struct AuthenticationExtensionsPrfInputs: Codable {
-  var eval: AuthenticationExtensionsPrfEvalInputs
+  var eval: AuthenticationExtensionsPrfEvalInputs?
 }
 
 internal struct AuthenticationExtensionsClientInputs: Codable {
