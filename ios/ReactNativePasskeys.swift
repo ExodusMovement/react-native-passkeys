@@ -31,6 +31,7 @@ func handleASAuthorizationError(error: NSError) -> Error {
 class ReactNativePasskeys: NSObject, PasskeyResultHandler {
   private var passkeyContext: PasskeyContext?
 
+  @objc
   func isSupported() -> Bool {
       if #available(iOS 15.0, *) {
           return true

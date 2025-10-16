@@ -11,6 +11,10 @@ import type {
 // and on native platforms to ReactNativePasskeys.ts
 import ReactNativePasskeysModule from "./ReactNativePasskeysModule";
 
+export function isSupported(): boolean {
+	return ReactNativePasskeysModule.isSupported();
+}
+
 export async function create(
   { signal, ...request }: Omit<PublicKeyCredentialCreationOptionsJSON, "extensions"> & {
 		// - only largeBlob is supported currently on iOS
