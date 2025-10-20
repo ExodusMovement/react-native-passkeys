@@ -2,6 +2,8 @@
 
 @interface RCT_EXTERN_MODULE(ReactNativePasskeys, NSObject)
 
+RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(isSupported);
+
 RCT_EXTERN_METHOD(create:(NSDictionary *)request
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject);
