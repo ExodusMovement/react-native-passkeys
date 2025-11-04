@@ -88,11 +88,11 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
       var platformKeyRegistrationRequest: ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest?
 
       if creationOptions.authenticatorSelection?.authenticatorAttachment == AuthenticatorAttachment.crossPlatform {
-        crossPlatformKeyRegistrationRequest = prepareCrossPlatformRegistrationRequest(challenge: challengeData,
+        crossPlatformKeyRegistrationRequest = try prepareCrossPlatformRegistrationRequest(challenge: challengeData,
                                                                                       userId: userId,
                                                                                       request: creationOptions)
       } else {
-        platformKeyRegistrationRequest = preparePlatformRegistrationRequest(challenge: challengeData,
+        platformKeyRegistrationRequest = try preparePlatformRegistrationRequest(challenge: challengeData,
                                                                             userId: userId,
                                                                             request: creationOptions)
       }
@@ -184,7 +184,7 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
       }
 
       let crossPlatformKeyAssertionRequest = prepareCrossPlatformAssertionRequest(challenge: challengeData, request: requestOptions)
-      let platformKeyAssertionRequest = preparePlatformAssertionRequest(challenge: challengeData, request: requestOptions)
+      let platformKeyAssertionRequest = try preparePlatformAssertionRequest(challenge: challengeData, request: requestOptions)
 
       let authController = ASAuthorizationController(authorizationRequests: [platformKeyAssertionRequest, crossPlatformKeyAssertionRequest])
 
@@ -202,9 +202,13 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
 
 private func preparePlatformRegistrationRequest(challenge: Data,
                                                 userId: Data,
-                                                request: PublicKeyCredentialCreationOptions) -> ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest {
+                                                request: PublicKeyCredentialCreationOptions) throws -> ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest {
+  guard let rpId = request.rp.id else {
+    throw AppError.missingRelyingPartyIdException
+  }
+  
   let platformKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(
-    relyingPartyIdentifier: request.rp.id!)
+    relyingPartyIdentifier: rpId)
 
   let platformKeyRegistrationRequest =
   platformKeyCredentialProvider.createCredentialRegistrationRequest(challenge: challenge,
@@ -231,9 +235,16 @@ private func preparePlatformRegistrationRequest(challenge: Data,
   
   if #available(iOS 18, *) {
     if let prf = request.extensions?.prf {
-      platformKeyRegistrationRequest.prf = prf.eval.map { eval in
-        let first = Data(base64URLEncoded: eval.first)!
-        let second = eval.second.flatMap { Data(base64URLEncoded: $0) }
+      platformKeyRegistrationRequest.prf = try prf.eval.map { eval in
+        guard let first = Data(base64URLEncoded: eval.first) else {
+          throw AppError.invalidPrfFirstValueException
+        }
+        let second = try eval.second.map { secondValue in
+          guard let decoded = Data(base64URLEncoded: secondValue) else {
+            throw AppError.invalidPrfSecondValueException
+          }
+          return decoded
+        }
         return .inputValues(ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: first, saltInput2: second))
       } ?? .checkForSupport
     }
@@ -261,9 +272,12 @@ private func preparePlatformRegistrationRequest(challenge: Data,
 
 private func prepareCrossPlatformRegistrationRequest(challenge: Data,
                                                      userId: Data,
-                                                     request: PublicKeyCredentialCreationOptions) -> ASAuthorizationSecurityKeyPublicKeyCredentialRegistrationRequest {
+                                                     request: PublicKeyCredentialCreationOptions) throws -> ASAuthorizationSecurityKeyPublicKeyCredentialRegistrationRequest {
+  guard let rpId = request.rp.id else {
+    throw AppError.missingRelyingPartyIdException
+  }
 
-  let crossPlatformCredentialProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: request.rp.id!)
+  let crossPlatformCredentialProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: rpId)
 
 
   let crossPlatformRegistrationRequest =
@@ -318,7 +332,7 @@ private func prepareCrossPlatformAssertionRequest(challenge: Data,
   return crossPlatformAssertionRequest
 }
 
-private func preparePlatformAssertionRequest(challenge: Data, request: PublicKeyCredentialRequestOptions) -> ASAuthorizationPlatformPublicKeyCredentialAssertionRequest {
+private func preparePlatformAssertionRequest(challenge: Data, request: PublicKeyCredentialRequestOptions) throws -> ASAuthorizationPlatformPublicKeyCredentialAssertionRequest {
 
   let platformKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(
     relyingPartyIdentifier: request.rpId)
@@ -334,17 +348,25 @@ private func preparePlatformAssertionRequest(challenge: Data, request: PublicKey
     }
 
     else if let blob = request.extensions?.largeBlob?.write {
-      platformKeyAssertionRequest.largeBlob = ASAuthorizationPublicKeyCredentialLargeBlobAssertionInput.write(
-        Data(base64URLEncoded: blob)!
-      )
+      guard let blobData = Data(base64URLEncoded: blob) else {
+        throw AppError.invalidLargeBlobDataException
+      }
+      platformKeyAssertionRequest.largeBlob = ASAuthorizationPublicKeyCredentialLargeBlobAssertionInput.write(blobData)
     }
   }
      
     
   if #available(iOS 18, *) {
-      platformKeyAssertionRequest.prf = request.extensions?.prf?.eval.map { eval in
-        let first = Data(base64URLEncoded: eval.first)!
-        let second = eval.second.flatMap { Data(base64URLEncoded: $0) }
+      platformKeyAssertionRequest.prf = try request.extensions?.prf?.eval.map { eval in
+        guard let first = Data(base64URLEncoded: eval.first) else {
+          throw AppError.invalidPrfFirstValueException
+        }
+        let second = try eval.second.map { secondValue in
+          guard let decoded = Data(base64URLEncoded: secondValue) else {
+            throw AppError.invalidPrfSecondValueException
+          }
+          return decoded
+        }
         return .inputValues(ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: first, saltInput2: second))
       }
   }

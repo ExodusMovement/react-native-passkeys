@@ -9,6 +9,10 @@ enum AppError: Error {
   case invalidChallengeException
   case missingUserIdException
   case invalidUserIdException
+  case missingRelyingPartyIdException
+  case invalidPrfFirstValueException
+  case invalidPrfSecondValueException
+  case invalidLargeBlobDataException
   case passkeyRequestFailedException(Error)
   case passkeyAuthorizationFailedException(Error)
   case genericError(String)
@@ -33,6 +37,14 @@ extension AppError: LocalizedError {
         return "`userId` is required"
       case .invalidUserIdException:
         return "The provided userId was invalid"
+      case .missingRelyingPartyIdException:
+        return "Missing relying party ID"
+      case .invalidPrfFirstValueException:
+        return "Invalid base64URL encoded PRF first value"
+      case .invalidPrfSecondValueException:
+        return "Invalid base64URL encoded PRF second value"
+      case .invalidLargeBlobDataException:
+        return "Invalid base64URL encoded large blob data"
       case .passkeyRequestFailedException(let originalError):
         return "The passkey request failed: \(originalError.localizedDescription)"
       case .passkeyAuthorizationFailedException(let originalError):
