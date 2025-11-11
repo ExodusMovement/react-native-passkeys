@@ -43,6 +43,7 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
         case let credential as ASAuthorizationPlatformPublicKeyCredentialRegistration:
             if credential.rawAttestationObject == nil {
                 handler.onFailure((ASAuthorizationError(ASAuthorizationError.Code.failed)))
+                return
             }
 
             var largeBlob: AuthenticationExtensionsLargeBlobOutputsJSON?
@@ -86,6 +87,7 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
         case let credential as ASAuthorizationSecurityKeyPublicKeyCredentialRegistration:
             if credential.rawAttestationObject == nil {
                 handler.onFailure((ASAuthorizationError(ASAuthorizationError.Code.failed)))
+                return
             }
 
             let response = AuthenticatorAttestationResponseJSON(
@@ -162,6 +164,7 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate,
             handler.onSuccess(.authentication(assertionResult))
         default:
             handler.onFailure((ASAuthorizationError(ASAuthorizationError.Code.failed)))
+            return
         }
     }
 }
