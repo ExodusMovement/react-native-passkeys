@@ -49,8 +49,9 @@ class ReactNativePasskeys: NSObject, PasskeyResultHandler {
       throw AppError.pendingPasskeyRequestException
     }
 
-    if LAContext().biometricType == .none {
-      throw AppError.biometricException
+    var error: NSError?
+    if !LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
+      throw AppError.deviceAuthenticationException
     }
 
     return true

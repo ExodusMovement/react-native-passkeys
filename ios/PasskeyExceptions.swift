@@ -4,7 +4,7 @@ enum AppError: Error {
   case notSupportedException
   case notConfiguredException
   case pendingPasskeyRequestException
-  case biometricException
+  case deviceAuthenticationException
   case userCancelledException
   case invalidChallengeException
   case missingUserIdException
@@ -27,8 +27,8 @@ extension AppError: LocalizedError {
         return "NOT_SUPPORTED: Passkeys are not supported on this iOS version. Please use iOS 15 or above."
       case .pendingPasskeyRequestException:
         return "There is already a pending passkey request"
-      case .biometricException:
-        return "NOT_SUPPORTED: Biometrics must be enabled"
+      case .deviceAuthenticationException:
+        return "NOT_SUPPORTED: Device authentication is not available. Enable passcode (or biometrics)."
       case .userCancelledException:
         return "USER_CANCELLED"
       case .invalidChallengeException:
