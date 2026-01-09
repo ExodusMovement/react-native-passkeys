@@ -19,12 +19,14 @@ import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.exceptions.NoCredentialException
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException
 import androidx.credentials.exceptions.publickeycredential.GetPublicKeyCredentialDomException
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,7 +72,13 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
                 result?.data?.getString(
                         "androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON"
                 )
-        promise.resolve(response)
+        if (response == null) {
+          promise.resolve(null)
+        } else {
+          val mapType = object : TypeToken<HashMap<String, Any>>() {}.type
+          val responseMap: HashMap<String, Any> = Gson().fromJson(response, mapType)
+          promise.resolve(Arguments.makeNativeMap(responseMap))
+        }
       } catch (e: CreateCredentialException) {
         promise.reject("Passkey Create", getRegistrationException(e), e)
       }
@@ -91,7 +99,13 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
                 result?.credential?.data?.getString(
                         "androidx.credentials.BUNDLE_KEY_AUTHENTICATION_RESPONSE_JSON"
                 )
-        promise.resolve(response)
+        if (response == null) {
+          promise.resolve(null)
+        } else {
+          val mapType = object : TypeToken<HashMap<String, Any>>() {}.type
+          val responseMap: HashMap<String, Any> = Gson().fromJson(response, mapType)
+          promise.resolve(Arguments.makeNativeMap(responseMap))
+        }
       } catch (e: GetCredentialException) {
         promise.reject("Passkey Get", getAuthenticationException(e), e)
       }
