@@ -12,7 +12,9 @@ const passkeys = NativeModules.ReactNativePasskeys
 
 const ReactNativePasskeys = passkeys
   ? {
-    ...passkeys,
+    isSupported: passkeys.isSupported.bind(passkeys),
+    isAutoFillAvailable: passkeys.isAutoFillAvailable.bind(passkeys),
+    get: passkeys.get.bind(passkeys),
     async create(
       request: PublicKeyCredentialCreationOptionsJSON,
     ): Promise<RegistrationResponseJSON | null> {
@@ -28,13 +30,13 @@ const ReactNativePasskeys = passkeys
       };
     },
   }
-  : new Proxy(
+  : (new Proxy(
     {},
     {
       get() {
         throw new Error(LINKING_ERROR);
       },
     }
-  );
+  ) as any);
 
 export default ReactNativePasskeys

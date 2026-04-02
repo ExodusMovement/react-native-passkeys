@@ -1324,6 +1324,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@exodus/react-native-passkeys@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@exodus/react-native-passkeys@workspace:."
+  dependencies:
+    "@arethetypeswrong/cli": "npm:^0.17.4"
+    "@biomejs/biome": "npm:1.9.4"
+    "@changesets/cli": "npm:^2.26.2"
+    "@simplewebauthn/typescript-types": "npm:^8.0.0"
+    "@types/react": "npm:^18.0.25"
+    react: "npm:18.2.0"
+    react-native: "npm:0.73.6"
+    typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
 "@hapi/hoek@npm:^9.0.0, @hapi/hoek@npm:^9.3.0":
   version: 9.3.0
   resolution: "@hapi/hoek@npm:9.3.0"
@@ -1567,21 +1582,6 @@ __metadata:
   checksum: 10c0/c37a5b4842bfdece3d14dfdb054f73fe15ed2d3da61b34ff76629fb5b1731647c49166fd2a8bf8b56fcfa51200382385ea8909a3cbecdad612310c114d3f6c99
   languageName: node
   linkType: hard
-
-"@passkeys/react-native-passkeys@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@passkeys/react-native-passkeys@workspace:."
-  dependencies:
-    "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@biomejs/biome": "npm:1.9.4"
-    "@changesets/cli": "npm:^2.26.2"
-    "@simplewebauthn/typescript-types": "npm:^8.0.0"
-    "@types/react": "npm:^18.0.25"
-    react: "npm:18.2.0"
-    react-native: "npm:0.73.6"
-    typescript: "npm:^5.2.2"
-  languageName: unknown
-  linkType: soft
 
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
