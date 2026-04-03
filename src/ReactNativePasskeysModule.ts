@@ -13,7 +13,7 @@ const passkeys = NativeModules.ReactNativePasskeys
 const ReactNativePasskeys = passkeys
   ? {
     isSupported: passkeys.isSupported.bind(passkeys),
-    isAutoFillAvailable: passkeys.isAutoFillAvailable.bind(passkeys),
+    isAutoFillAvailable: passkeys.isAutoFillAvailable?.bind(passkeys),
     get: passkeys.get.bind(passkeys),
     async create(
       request: PublicKeyCredentialCreationOptionsJSON,
