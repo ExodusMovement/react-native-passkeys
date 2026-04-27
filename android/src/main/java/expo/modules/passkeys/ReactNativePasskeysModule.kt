@@ -65,7 +65,7 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
     mainScope.launch {
       try {
         val result =
-                currentActivity?.let {
+                reactApplicationContext.currentActivity?.let {
                   credentialManager.createCredential(it, createPublicKeyCredentialRequest)
                 }
         val response =
@@ -94,7 +94,7 @@ class ReactNativePasskeysModule internal constructor(private val context: ReactA
     mainScope.launch {
       try {
         val result =
-                currentActivity?.let { credentialManager.getCredential(it, getCredentialRequest) }
+                reactApplicationContext.currentActivity?.let { credentialManager.getCredential(it, getCredentialRequest) }
         val response =
                 result?.credential?.data?.getString(
                         "androidx.credentials.BUNDLE_KEY_AUTHENTICATION_RESPONSE_JSON"
